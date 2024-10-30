@@ -183,7 +183,9 @@ impl OcspExt {
                 trace!("Encoding nonce extension");
                 trace!("Nonce {:?}", self);
                 // == OCSP_EXT_HEX_NONCE
-                let mut id = OCSP_EXT_NONCE_HEX.to_vec();
+                let mut id = vec![
+                    0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x02,
+                ];;
                 let nc = asn1_encode_octet(nonce)?;
                 id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
@@ -193,11 +195,12 @@ impl OcspExt {
             OcspExt::ExtendedRevocation => {
                 trace!("Encoding extended revocation extension");
                 // == OCSP_EXT_EXTENDED_REVOKE_HEX
-                let mut id = OCSP_EXT_EXTENDED_REVOKE_HEX.to_vec();
+                let mut id = vec![
+                    0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09,
+                ];
                 let nc = asn1_encode_octet(&[ASN1_NULL])?;
                 id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
-                v.clear();
                 v.extend(len);
                 v.extend(id);
             }
