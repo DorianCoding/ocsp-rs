@@ -4,7 +4,7 @@ use asn1_der::DerObject;
 use tracing::{error, trace};
 
 use crate::common::asn1::{
-    TryIntoSequence, ASN1_EXPLICIT_0, ASN1_EXPLICIT_1, ASN1_EXPLICIT_2, ASN1_OID,
+    TryIntoSequence, ASN1_EXPLICIT_0, ASN1_EXPLICIT_1, ASN1_EXPLICIT_2, ASN1_NULL, ASN1_OID
 };
 use crate::{err::OcspError, oid::*};
 
@@ -194,7 +194,7 @@ impl OcspExt {
                 trace!("Encoding extended revocation extension");
                 // == OCSP_EXT_HEX_NONCE
                 let mut id = OCSP_EXT_EXTENDED_REVOKE_HEX.to_vec();
-                let nc = asn1_encode_octet(&[0])?;
+                let nc = asn1_encode_octet(&[ASN1_NULL])?;
                 id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
