@@ -196,7 +196,7 @@ impl OcspExt {
                 trace!("Encoding extended revocation extension");
                 // == OCSP_EXT_EXTENDED_REVOKE_HEX
                 let mut id = vec![
-                    0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09,
+                    0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09, ASN1_NULL
                 ];
                 //let nc = asn1_encode_octet(&[ASN1_NULL])?;
                 //id.extend(nc);
