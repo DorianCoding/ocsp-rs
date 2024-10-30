@@ -81,6 +81,8 @@ pub enum OcspExt {
         /// nonce value
         nonce: Bytes,
     },
+    /// 4.4.8
+    ExtendedRevocation,
     /// 4.4.2  
     /// REVIEW: untested
     CrlRef {
@@ -121,6 +123,10 @@ impl OcspExt {
                         .to_vec(),
                 }
             }
+            OCSP_EXT_EXTENDED_REVOKE_ID => {
+                trace!("Found extended revocation");
+                OcspExt::ExtendedRevocation
+            },
             OCSP_EXT_CRLREF_ID => {
                 trace!("Found crlref extension");
                 let mut url = None;
@@ -159,8 +165,7 @@ impl OcspExt {
             | OCSP_EXT_CRL_REASON_ID
             | OCSP_EXT_INVALID_DATE_ID
             | OCSP_EXT_SERVICE_LOCATOR_ID
-            | OCSP_EXT_PREF_SIG_ALGS_ID
-            | OCSP_EXT_EXTENDED_REVOKE_ID => {
+            | OCSP_EXT_PREF_SIG_ALGS_ID => {
                 unimplemented!()
             }
             _ => return Err(OcspError::OcspExtUnknown),
@@ -178,10 +183,18 @@ impl OcspExt {
                 trace!("Encoding nonce extension");
                 trace!("Nonce {:?}", self);
                 // == OCSP_EXT_HEX_NONCE
-                let mut id = vec![
-                    0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x02,
-                ];
+                let mut id = OCSP_EXT_NONCE_HEX.to_vec();
                 let nc = asn1_encode_octet(nonce)?;
+                id.extend(nc);
+                let len = asn1_encode_length(id.len())?;
+                v.extend(len);
+                v.extend(id);
+            },
+            OcspExt::ExtendedRevocation => {
+                trace!("Encoding extended revocation extension");
+                // == OCSP_EXT_HEX_NONCE
+                let mut id = OCSP_EXT_EXTENDED_REVOKE_HEX.to_vec();
+                let nc = asn1_encode_octet(&[0])?;
                 id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
