@@ -4,7 +4,7 @@ use asn1_der::DerObject;
 use tracing::{error, trace};
 
 use crate::common::asn1::{
-    TryIntoSequence, ASN1_EXPLICIT_0, ASN1_EXPLICIT_1, ASN1_EXPLICIT_2, ASN1_INTEGER, ASN1_NULL, ASN1_OID
+    TryIntoSequence, ASN1_EXPLICIT_0, ASN1_EXPLICIT_1, ASN1_EXPLICIT_2, ASN1_INTEGER, ASN1_NULL, ASN1_OCTET, ASN1_OID
 };
 use crate::{err::OcspError, oid::*};
 
@@ -198,7 +198,7 @@ impl OcspExt {
                 let mut id = vec![
                     0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09,
                 ];
-                let mut tlv = vec![ASN1_INTEGER];
+                let mut tlv = vec![ASN1_OCTET];
                 let len = asn1_encode_length(1)?;
                 tlv.extend(len);
                 tlv.extend(&[ASN1_NULL]);
