@@ -192,11 +192,12 @@ impl OcspExt {
             },
             OcspExt::ExtendedRevocation => {
                 trace!("Encoding extended revocation extension");
-                // == OCSP_EXT_HEX_NONCE
+                // == OCSP_EXT_EXTENDED_REVOKE_HEX
                 let mut id = OCSP_EXT_EXTENDED_REVOKE_HEX.to_vec();
-                let nc = asn1_encode_octet(&[ASN1_NULL,0])?;
+                let nc = asn1_encode_octet(&[ASN1_NULL])?;
                 id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
+                v.clear();
                 v.extend(len);
                 v.extend(id);
             }
