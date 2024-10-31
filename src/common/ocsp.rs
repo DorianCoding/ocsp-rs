@@ -4,7 +4,7 @@ use asn1_der::DerObject;
 use tracing::{error, trace};
 
 use crate::common::asn1::{
-    asn1_encode_bit_string, TryIntoSequence, ASN1_EXPLICIT_0, ASN1_EXPLICIT_1, ASN1_EXPLICIT_2, ASN1_INTEGER, ASN1_NULL, ASN1_OCTET, ASN1_OID
+    asn1_encode_bit_string, TryIntoSequence, ASN1_BIT_STRING, ASN1_EXPLICIT_0, ASN1_EXPLICIT_1, ASN1_EXPLICIT_2, ASN1_INTEGER, ASN1_NULL, ASN1_OCTET, ASN1_OID
 };
 use crate::{err::OcspError, oid::*};
 
@@ -195,14 +195,12 @@ impl OcspExt {
             OcspExt::ExtendedRevocation => {
                 trace!("Encoding extended revocation extension");
                 // == OCSP_EXT_EXTENDED_REVOKE_HEX
-                let mut id = vec![
+                let id = vec![
                     0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09,
                 ];
-                let nc = asn1_encode_bit_string(&[ASN1_NULL])?;
-                id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
-                v.extend(id);
+                v.extend(&[ASN1_NULL,ASN1_BIT_STRING]);
             }
             _ => {
                 error!("Unsupported Extension");
