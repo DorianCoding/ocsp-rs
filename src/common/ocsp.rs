@@ -198,7 +198,7 @@ impl OcspExt {
                 let mut id = vec![
                     0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09,
                 ];
-                id.extend(&[ASN1_NULL]);
+                id.extend(&[ASN1_NULL,0,ASN1_NULL]);
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
                 v.extend(id);
