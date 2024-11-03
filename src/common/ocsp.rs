@@ -198,12 +198,12 @@ impl OcspExt {
                 let mut id = vec![
                     0x06, 0x09, 0x2b, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01, 0x09,
                 ];
-                let nc = asn1_encode_octet(&[ASN1_NULL])?;
-                id.extend(nc);
+                //let nc = asn1_encode_octet(&[ASN1_NULL])?;
+                //id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
                 v.extend(id);
-                //v.extend(&[0,ASN1_NULL]);
+                v.extend(&[ASN1_OCTET,1,ASN1_NULL]);
             }
             _ => {
                 error!("Unsupported Extension");
