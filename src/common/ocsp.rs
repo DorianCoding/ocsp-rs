@@ -203,6 +203,7 @@ impl OcspExt {
                 let len = asn1_encode_length(id.len())?;
                 let null = &[ASN1_NULL,0];
                 id.extend(null);
+                v.clear();
                 v.extend(len);
                 v.extend(id);
             }
