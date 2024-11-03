@@ -189,7 +189,7 @@ impl OcspExt {
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
                 v.extend(id);
-                v.extend(&[ASN1_NULL])
+                v.extend(&[0,ASN1_NULL])
             }
             OcspExt::ExtendedRevocation => {
                 trace!("Encoding extended revocation extension");
