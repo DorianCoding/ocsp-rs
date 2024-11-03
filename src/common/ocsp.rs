@@ -202,11 +202,11 @@ impl OcspExt {
                 //id.extend(nc);
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
-                v.extend(id);
                 let null = &[ASN1_NULL];
                 let mut val = asn1_encode_length(null.len())?;
-                val.extend(null);
-                v.extend(val);
+                id.extend(val);
+                id.extend(null);
+                v.extend(id);
             }
             _ => {
                 error!("Unsupported Extension");
