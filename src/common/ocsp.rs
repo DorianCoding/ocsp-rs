@@ -203,7 +203,7 @@ impl OcspExt {
                 let len = asn1_encode_length(id.len())?;
                 v.extend(len);
                 v.extend(id);
-                v.extend(&[ASN1_BIT_STRING,0,ASN1_NULL]);
+                v.extend(&[ASN1_BIT_STRING]);
             }
             _ => {
                 error!("Unsupported Extension");
